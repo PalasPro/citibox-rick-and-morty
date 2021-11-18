@@ -1,0 +1,4 @@
+include ':app'
+include ':data-layer'
+include ':domain-layer'
+include ':presenter-layer'
