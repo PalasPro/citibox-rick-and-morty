@@ -1,4 +1,4 @@
-package com.palaspro.citiboxchallenge.presenterlayer.feature.main.viewmodel
+package com.palaspro.citiboxchallenge.presenterlayer.feature.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,13 +6,10 @@ import com.palaspro.citiboxchallenge.domainlayer.bridge.ListCharactersBridge
 import com.palaspro.citiboxchallenge.domainlayer.model.CharacterBo
 import com.palaspro.citiboxchallenge.domainlayer.model.ErrorBo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class HomeViewModel(
     private val bridge: ListCharactersBridge
 ) : ViewModel() {
 

@@ -5,17 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.toArgb
+import androidx.navigation.compose.rememberNavController
 import com.palaspro.citiboxchallenge.presenterlayer.base.themeColors
 import com.palaspro.citiboxchallenge.presenterlayer.feature.main.ui.compose.MainScreen
-import com.palaspro.citiboxchallenge.presenterlayer.feature.main.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalFoundationApi
 class MainActivity : ComponentActivity() {
-
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,21 +21,12 @@ class MainActivity : ComponentActivity() {
 
     private fun initViews() {
         setContent {
+            val navController = rememberNavController()
             MaterialTheme(
                 colors = themeColors
             ) {
                 window.statusBarColor = themeColors.primary.toArgb()
-
-                val characters = viewModel.characters.collectAsState(initial = listOf()).value
-                val loadMore = viewModel.loadMore.collectAsState(initial = false).value
-                MainScreen(
-                    characters = characters,
-                    moreElements = loadMore,
-                    onClick = {
-                        // TODO
-                    },
-                    onLoadMore = { viewModel.loadNextPage() })
-
+                MainScreen(navController = navController)
             }
         }
     }

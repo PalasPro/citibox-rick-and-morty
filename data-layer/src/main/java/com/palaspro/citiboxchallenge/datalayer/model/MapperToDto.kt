@@ -1,6 +1,8 @@
 package com.palaspro.citiboxchallenge.datalayer.model
 
 import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Character
+import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Episode
+import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Location
 import com.palaspro.citiboxchallenge.datalayer.di.URL_BASE
 
 fun List<Character>.toDto(): ResponseInfoPaginationDto.Characters {
@@ -37,4 +39,26 @@ fun Character.toDto(): CharacterDto =
         episode = episode,
         url = url,
         created = created,
+    )
+
+fun Location.toDto(): LocationDto =
+    LocationDto(
+        id = id,
+        name = name,
+        type = type,
+        dimension = dimension,
+        residents = residents,
+        url = url,
+        created = created,
+    )
+
+fun Episode.toDto() : EpisodeDto =
+    EpisodeDto(
+        id = id,
+        name = name,
+        air_date = air_date,
+        episode = episode,
+        characters = characters,
+        url = url,
+        created = created
     )

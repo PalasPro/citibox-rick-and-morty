@@ -1,6 +1,8 @@
 package com.palaspro.citiboxchallenge.datalayer.datasource.remote
 
 import com.palaspro.citiboxchallenge.datalayer.model.CharacterDto
+import com.palaspro.citiboxchallenge.datalayer.model.EpisodeDto
+import com.palaspro.citiboxchallenge.datalayer.model.LocationDto
 import com.palaspro.citiboxchallenge.datalayer.model.ResponseInfoPaginationDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -14,4 +16,10 @@ interface RickAndMortyApiRest {
 
     @GET("/api/character/{idCharacter}")
     suspend fun getCharacter(@Path("idCharacter") idCharacter: Int): Response<CharacterDto>
+
+    @GET("/api/location/{idLocation}")
+    suspend fun getLocation(@Path("idLocation") idLocation: Int): Response<LocationDto>
+
+    @GET("/api/episode/{idEpisode}")
+    suspend fun getEpisode(@Path("idEpisode") idEpisode: Int): Response<EpisodeDto>
 }
