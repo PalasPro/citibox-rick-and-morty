@@ -98,7 +98,7 @@ class DataSourceTest : KoinTest {
             // given
             whenever(mockCharacterDao.getCharacterSync(wrongId)).doReturn(null)
             // when
-            val result = characterLocalDataSource.getCharacter(wrongId)
+            val result = characterLocalDataSource.getCharacterSync(wrongId)
             // then
             Assert.assertTrue((result as? Either.Left<ErrorDto.NoData>) != null)
         }
@@ -111,7 +111,7 @@ class DataSourceTest : KoinTest {
             // given
             whenever(mockCharacterDao.getCharacterSync(correctId)).doReturn(buildCharacterEntity())
             // when
-            val result = characterLocalDataSource.getCharacter(correctId)
+            val result = characterLocalDataSource.getCharacterSync(correctId)
             // then
             Assert.assertTrue((result as? Either.Right<CharacterBo>) != null)
         }
