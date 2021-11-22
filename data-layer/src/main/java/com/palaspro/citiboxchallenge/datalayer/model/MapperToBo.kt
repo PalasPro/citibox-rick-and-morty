@@ -21,8 +21,8 @@ fun InfoPaginationDto.toBo(): InfoPaginationBo =
     InfoPaginationBo(
         count = count,
         pages = pages,
-        next = next?.let { Uri.parse(it).getQueryParameter("page")?.toInt() },
-        prev = prev?.let { Uri.parse(it).getQueryParameter("page")?.toInt() }
+        next = next?.let { Uri.parse(it)?.getQueryParameter("page")?.toInt() },
+        prev = prev?.let { Uri.parse(it)?.getQueryParameter("page")?.toInt() }
     )
 
 fun List<CharacterDto>.toBo(): List<CharacterBo> =
@@ -41,7 +41,7 @@ fun CharacterDto.toBo(): CharacterBo =
         origin = origin.toBo(),
         location = location.toBo(),
         image = image,
-        episode = episode.mapNotNull { Uri.parse(it).pathSegments.last()?.toInt() },
+        episode = episode.mapNotNull { Uri.parse(it)?.pathSegments?.last()?.toInt() },
         url = url
     )
 
@@ -52,7 +52,7 @@ fun String.getCodeFromUrl(): Int =
     if (isEmpty()) {
         -1
     } else {
-        Uri.parse(this).pathSegments.last()?.toInt() ?: -1
+        Uri.parse(this)?.pathSegments?.last()?.toInt() ?: -1
     }
 
 fun LocationDto.toBo(): LocationBo =
@@ -61,7 +61,7 @@ fun LocationDto.toBo(): LocationBo =
         name = name,
         type = type,
         dimension = dimension,
-        residents = residents.mapNotNull { Uri.parse(it).pathSegments.last()?.toInt() },
+        residents = residents.mapNotNull { Uri.parse(it)?.pathSegments?.last()?.toInt() },
         url = url,
     )
 
