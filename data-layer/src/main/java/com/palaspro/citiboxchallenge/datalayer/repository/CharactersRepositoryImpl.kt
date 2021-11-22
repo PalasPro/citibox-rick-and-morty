@@ -1,11 +1,13 @@
 package com.palaspro.citiboxchallenge.datalayer.repository
 
 import arrow.core.Either
+import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
 import com.palaspro.citiboxchallenge.datalayer.DataLayerContract
 import com.palaspro.citiboxchallenge.datalayer.model.toBo
 import com.palaspro.citiboxchallenge.domainlayer.DomainLayerContract
+import com.palaspro.citiboxchallenge.domainlayer.model.CharacterBo
 import com.palaspro.citiboxchallenge.domainlayer.model.ErrorBo
 import com.palaspro.citiboxchallenge.domainlayer.model.ResponseInfoPaginationBo
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +25,39 @@ class CharactersRepositoryImpl(
                 ifRight = { emit(it.toBo().right()) }
             )
         }
+
+    override fun getCharacter(id: Int): Flow<Either<ErrorBo, CharacterBo>> =
+        local.getCharacter(id).transform { value ->
+            value.fold(
+                // if not found in local, get from remote and save it
+                ifLeft = {
+                    remote.getCharacter(id).map { character ->
+                        local.setCharacter(character)
+                        emit(character.toBo().right())
+                    }
+                },
+                ifRight = { emit(it.toBo().right()) }
+            )
+        }
+
+    override suspend fun getMultipleCharacters(ids: List<Int>): Either<ErrorBo, List<CharacterBo>> =
+        ids.mapNotNull { id ->
+            getCharacterSync(id).orNull()
+        }.right()
+
+    override suspend fun getCharacterSync(id: Int): Either<ErrorBo, CharacterBo> =
+        local.getCharacterSync(id).fold(
+            // if not found in local, get from remote and save it
+            ifLeft = {
+                remote.getCharacter(id).flatMap { character ->
+                    local.setCharacter(character)
+                    character.toBo().right()
+                }.mapLeft {
+                    it.toBo()
+                }
+            },
+            ifRight = { it.toBo().right() }
+        )
 
 
     override suspend fun loadPageCharacters(page: Int): Either<ErrorBo, Boolean> =

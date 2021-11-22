@@ -10,6 +10,7 @@ val margin8Dp = 8.dp
 val margin16Dp = 16.dp
 
 val heightItem = 144.dp
+val nameCharacterItem = 72.dp
 
 val fontSizeTitleToolbar = 18.sp
 

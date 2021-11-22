@@ -13,6 +13,19 @@ sealed class ResponseInfoPaginationBo(
         ResponseInfoPaginationBo(info)
 }
 
+sealed class MatchStateBo {
+    object Searching : MatchStateBo()
+    object NotFound : MatchStateBo()
+    data class MatchBeerBo(
+        val characterBo: CharacterBo?,
+        val locationBo: LocationBo?,
+        val firstDate: String?,
+        val lastDate: String?,
+        val episodesMatch: Int = 0
+    ) : MatchStateBo()
+}
+
+
 data class InfoPaginationBo(
     val count: Int,
     val pages: Int,
@@ -31,8 +44,7 @@ data class CharacterBo(
     val location: LocationSummaryBo,
     val image: String,
     val episode: List<Int>,
-    val url: String,
-    val created: String
+    val url: String
 )
 
 data class LocationSummaryBo(
@@ -47,5 +59,13 @@ data class LocationBo(
     val dimension: String,
     val residents: List<Int>,
     val url: String,
-    val created: String,
+)
+
+data class EpisodeBo(
+    val id: Int,
+    val name: String,
+    val airDate: String,
+    val episode: String,
+    val characters: List<String>,
+    val url: String,
 )

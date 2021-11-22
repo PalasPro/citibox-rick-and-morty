@@ -42,8 +42,7 @@ fun CharacterDto.toBo(): CharacterBo =
         location = location.toBo(),
         image = image,
         episode = episode.mapNotNull { Uri.parse(it).pathSegments.last()?.toInt() },
-        url = url,
-        created = created
+        url = url
     )
 
 fun LocationSummaryDto.toBo(): LocationSummaryBo =
@@ -64,5 +63,14 @@ fun LocationDto.toBo(): LocationBo =
         dimension = dimension,
         residents = residents.mapNotNull { Uri.parse(it).pathSegments.last()?.toInt() },
         url = url,
-        created = created
+    )
+
+fun EpisodeDto.toBo(): EpisodeBo =
+    EpisodeBo(
+        id = id,
+        name = name,
+        airDate = air_date,
+        episode = episode,
+        characters = characters,
+        url = url
     )

@@ -3,15 +3,20 @@ package com.palaspro.citiboxchallenge.datalayer.di
 import androidx.room.Room
 import com.palaspro.citiboxchallenge.datalayer.DataLayerContract
 import com.palaspro.citiboxchallenge.datalayer.datasource.local.CharactersLocalDataSourceImpl
+import com.palaspro.citiboxchallenge.datalayer.datasource.local.EpisodeLocalDataSourceImpl
+import com.palaspro.citiboxchallenge.datalayer.datasource.local.LocationLocalDataSourceImpl
 import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.AppDataBase
 import com.palaspro.citiboxchallenge.datalayer.datasource.remote.CharactersRemoteDataSourceImpl
+import com.palaspro.citiboxchallenge.datalayer.datasource.remote.EpisodeRemoteDataSourceImpl
+import com.palaspro.citiboxchallenge.datalayer.datasource.remote.LocationRemoteDataSourceImpl
 import com.palaspro.citiboxchallenge.datalayer.datasource.remote.RickAndMortyApiRest
 import com.palaspro.citiboxchallenge.datalayer.repository.CharactersRepositoryImpl
+import com.palaspro.citiboxchallenge.datalayer.repository.EpisodeRepositoryImpl
+import com.palaspro.citiboxchallenge.datalayer.repository.LocationRepositoryImpl
 import com.palaspro.citiboxchallenge.domainlayer.DomainLayerContract
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -58,11 +63,41 @@ private val dataSourceModules = module {
     single<DataLayerContract.CharactersDataSource.Local> {
         CharactersLocalDataSourceImpl(get())
     }
+
+    single<DataLayerContract.LocationsDataSource.Remote> {
+        LocationRemoteDataSourceImpl(get())
+    }
+
+    single<DataLayerContract.LocationsDataSource.Local> {
+        LocationLocalDataSourceImpl(get())
+    }
+
+    single<DataLayerContract.EpisodesDataSource.Remote> {
+        EpisodeRemoteDataSourceImpl(get())
+    }
+
+    single<DataLayerContract.EpisodesDataSource.Local> {
+        EpisodeLocalDataSourceImpl(get())
+    }
 }
 private val repositoryModules = module {
 
     factory<DomainLayerContract.CharactersRepository> {
         CharactersRepositoryImpl(
+            remote = get(),
+            local = get()
+        )
+    }
+
+    factory<DomainLayerContract.LocationRepository> {
+        LocationRepositoryImpl(
+            remote = get(),
+            local = get()
+        )
+    }
+
+    factory<DomainLayerContract.EpisodeRepository> {
+        EpisodeRepositoryImpl(
             remote = get(),
             local = get()
         )
