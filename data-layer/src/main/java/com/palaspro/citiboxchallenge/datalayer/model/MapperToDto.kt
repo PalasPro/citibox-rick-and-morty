@@ -4,6 +4,7 @@ import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Character
 import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Episode
 import com.palaspro.citiboxchallenge.datalayer.datasource.local.room.Location
 import com.palaspro.citiboxchallenge.datalayer.di.URL_BASE
+import com.palaspro.citiboxchallenge.domainlayer.model.RequestConfigBo
 
 fun List<Character>.toDto(): ResponseInfoPaginationDto.Characters {
     val maxPage = maxOf { it.page }
@@ -52,7 +53,7 @@ fun Location.toDto(): LocationDto =
         created = created,
     )
 
-fun Episode.toDto() : EpisodeDto =
+fun Episode.toDto(): EpisodeDto =
     EpisodeDto(
         id = id,
         name = name,
@@ -62,3 +63,8 @@ fun Episode.toDto() : EpisodeDto =
         url = url,
         created = created
     )
+
+fun RequestConfigBo.toDto() = RequestConfigDto(
+    page = page,
+    query = query
+)

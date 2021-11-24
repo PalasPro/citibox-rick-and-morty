@@ -5,11 +5,11 @@ import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
 import com.palaspro.citiboxchallenge.datalayer.DataLayerContract
+import com.palaspro.citiboxchallenge.datalayer.model.nextPage
 import com.palaspro.citiboxchallenge.datalayer.model.toBo
+import com.palaspro.citiboxchallenge.datalayer.model.toDto
 import com.palaspro.citiboxchallenge.domainlayer.DomainLayerContract
-import com.palaspro.citiboxchallenge.domainlayer.model.CharacterBo
-import com.palaspro.citiboxchallenge.domainlayer.model.ErrorBo
-import com.palaspro.citiboxchallenge.domainlayer.model.ResponseInfoPaginationBo
+import com.palaspro.citiboxchallenge.domainlayer.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 
@@ -18,11 +18,31 @@ class CharactersRepositoryImpl(
     private val local: DataLayerContract.CharactersDataSource.Local
 ) : DomainLayerContract.CharactersRepository {
 
+    companion object {
+        private val requestCharactersConfig = RequestConfigBo()
+    }
+
     override fun getCharacters(): Flow<Either<ErrorBo, ResponseInfoPaginationBo.Characters>> =
         local.getCharacters().transform { value ->
             value.fold(
-                ifLeft = { emit(it.toBo().left()) },
-                ifRight = { emit(it.toBo().right()) }
+                ifLeft = {
+                    when (it.toBo()) {
+                        is ErrorBo.NoData -> {
+                            requestCharactersConfig.page = 1
+                            emit(
+                                ResponseInfoPaginationBo.Characters(
+                                    info = InfoPaginationBo(),
+                                    results = listOf()
+                                ).right()
+                            )
+                        }
+                        else -> emit(it.toBo().left())
+                    }
+                },
+                ifRight = {
+                    requestCharactersConfig.page = it.info.next?.nextPage() ?: 1
+                    emit(it.toBo().right())
+                }
             )
         }
 
@@ -59,14 +79,27 @@ class CharactersRepositoryImpl(
             ifRight = { it.toBo().right() }
         )
 
-
-    override suspend fun loadPageCharacters(page: Int): Either<ErrorBo, Boolean> =
-        remote.getCharacters(page).fold(
+    override suspend fun loadNextPageCharacters(): Either<ErrorBo, Boolean> {
+        return remote.getCharacters(requestCharactersConfig.toDto()).fold(
             ifLeft = { it.toBo().left() },
             ifRight = { response ->
-                local.setCharacters(page, response)
+                local.setCharacters(requestCharactersConfig.page, response)
                 (response.info.next != null).right()
             }
         )
+    }
+
+    override suspend fun filterCharacters(query: String): Either<ErrorBo, Boolean> =
+        if (requestCharactersConfig.query != query) {
+            // reset request config
+            requestCharactersConfig.page = 1
+            requestCharactersConfig.query = query
+            // clear current pagination
+            local.clearPaginationToCharacters()
+            loadNextPageCharacters()
+            true.right()
+        } else {
+            false.right()
+        }
 
 }

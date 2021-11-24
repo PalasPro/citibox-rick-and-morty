@@ -19,7 +19,8 @@ private val bridgeModules = module {
     factory<ListCharactersBridge> {
         ListCharactersBridgeImpl(
             getListCharactersUc = get(named(name = GET_LIST_CHARACTERS_UC)),
-            loadPageCharactersUc = get(named(name = LOAD_PAGE_CHARACTERS_UC))
+            loadPageCharactersUc = get(named(name = LOAD_PAGE_CHARACTERS_UC)),
+            filterCharactersUc = get(named(name = FILTER_CHARACTERS_UC))
         )
     }
 
@@ -41,8 +42,14 @@ private val useCaseModules = module {
         )
     }
 
-    factory<DomainLayerContract.UseCase<Int, Either<ErrorBo, Boolean>>>(named(name = LOAD_PAGE_CHARACTERS_UC)) {
+    factory<DomainLayerContract.UseCase<Any?, Either<ErrorBo, Boolean>>>(named(name = LOAD_PAGE_CHARACTERS_UC)) {
         LoadPageCharactersUc(
+            repository = get()
+        )
+    }
+
+    factory<DomainLayerContract.UseCase<String, Either<ErrorBo, Boolean>>>(named(name = FILTER_CHARACTERS_UC)) {
+        FilterCharactersUc(
             repository = get()
         )
     }
