@@ -1,12 +1,16 @@
 package com.palaspro.citiboxchallenge.presenterlayer.feature.home.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.palaspro.citiboxchallenge.domainlayer.bridge.ListCharactersBridge
 import com.palaspro.citiboxchallenge.domainlayer.model.CharacterBo
 import com.palaspro.citiboxchallenge.domainlayer.model.ErrorBo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -20,13 +24,13 @@ class HomeViewModel(
             },
             ifRight = {
                 emit(it.results)
-                _loadMore.value = it.info.hasNext
+                loadMore = it.info.hasNext
             }
         )
     }
 
-    private val _loadMore: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val loadMore: SharedFlow<Boolean> = _loadMore
+    var loadMore by mutableStateOf(false)
+        private set
 
     init {
         filterCharacters()
@@ -47,7 +51,7 @@ class HomeViewModel(
 
     private fun handleSuccessNextPage(morePages: Boolean) {
         viewModelScope.launch {
-            _loadMore.value = morePages
+            loadMore = morePages
         }
     }
 
