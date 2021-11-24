@@ -1,7 +1,7 @@
 # Citibox Mobile Tech Challenge
 
 This android app has been development as a Citibox challenge. The application has the follow features:
-1. A main screen where appear a character list of Rick And Morty program. Each item show the image and name of character.
+1. A main screen where appear a character list of Rick And Morty program. Each item show the image and name of character. The user can filter the characters by name tipping in the text field.
 2. A Matcher Beer screen. In this screen the app math the best colleague to take a beer selecting a character. The conditions to take a beer are the follow:
    - Characters can only meet actors who are in the same location.
    - So that they have enough anecdotes to tell while they get drunk, priority will be given to the characters who have shared the filming set the most times.

@@ -8,7 +8,7 @@ import com.palaspro.citiboxchallenge.domainlayer.model.RequestConfigBo
 
 fun List<Character>.toDto(): ResponseInfoPaginationDto.Characters {
     val maxPage = maxOf { it.page }
-    val hasMore = any { it.hasNextPage }
+    val hasMore = filter { it.page == maxPage }.any { it.hasNextPage }
     val nextPage = if (hasMore) {
         "$URL_BASE/api/character?page=${maxPage + 1}"
     } else {
