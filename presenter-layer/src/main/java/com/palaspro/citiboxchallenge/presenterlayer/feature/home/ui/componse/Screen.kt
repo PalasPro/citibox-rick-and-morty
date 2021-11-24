@@ -41,6 +41,7 @@ fun HomeScreen(
                 fontSize = fontSizeTitleToolbar
             )
         })
+        SearchForm(viewModel)
         LazyVerticalGrid(
             cells = GridCells.Fixed(count = 2),
             contentPadding = PaddingValues(horizontal = margin8Dp, vertical = margin8Dp),

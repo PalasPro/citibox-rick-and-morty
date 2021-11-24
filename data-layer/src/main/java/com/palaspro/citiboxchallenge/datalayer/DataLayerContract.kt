@@ -9,13 +9,15 @@ sealed class DataLayerContract {
     sealed class CharactersDataSource {
 
         interface Remote {
-            suspend fun getCharacters(page: Int): Either<ErrorDto, ResponseInfoPaginationDto.Characters>
+            suspend fun getCharacters(requestConfig: RequestConfigDto): Either<ErrorDto, ResponseInfoPaginationDto.Characters>
             suspend fun getCharacter(id: Int): Either<ErrorDto, CharacterDto>
         }
 
         interface Local {
             fun getCharacters(): Flow<Either<ErrorDto, ResponseInfoPaginationDto.Characters>>
             fun getCharacter(id: Int): Flow<Either<ErrorDto, CharacterDto>>
+
+            suspend fun clearPaginationToCharacters()
 
             suspend fun getCharacterSync(id: Int): Either<ErrorDto, CharacterDto>
             suspend fun setCharacter(characters: CharacterDto)

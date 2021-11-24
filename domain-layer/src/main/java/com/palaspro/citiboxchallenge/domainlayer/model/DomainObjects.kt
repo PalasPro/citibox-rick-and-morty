@@ -27,10 +27,9 @@ sealed class MatchStateBo {
 
 
 data class InfoPaginationBo(
-    val count: Int,
-    val pages: Int,
-    val next: Int?,
-    val prev: Int?
+    val count: Int = 0,
+    val pages: Int = 0,
+    val hasNext: Boolean = false
 )
 
 data class CharacterBo(
@@ -68,4 +67,9 @@ data class EpisodeBo(
     val episode: String,
     val characters: List<String>,
     val url: String,
+)
+
+data class RequestConfigBo(
+    var page : Int = 1,
+    var query: String? = null
 )

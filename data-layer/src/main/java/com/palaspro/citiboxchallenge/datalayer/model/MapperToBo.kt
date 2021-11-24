@@ -21,9 +21,10 @@ fun InfoPaginationDto.toBo(): InfoPaginationBo =
     InfoPaginationBo(
         count = count,
         pages = pages,
-        next = next?.let { Uri.parse(it)?.getQueryParameter("page")?.toInt() },
-        prev = prev?.let { Uri.parse(it)?.getQueryParameter("page")?.toInt() }
+        hasNext = next?.nextPage() != null
     )
+
+fun String?.nextPage(): Int? = Uri.parse(this)?.getQueryParameter("page")?.toInt()
 
 fun List<CharacterDto>.toBo(): List<CharacterBo> =
     this.map {

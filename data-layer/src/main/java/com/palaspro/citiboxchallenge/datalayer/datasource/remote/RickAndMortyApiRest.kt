@@ -8,11 +8,12 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface RickAndMortyApiRest {
 
     @GET("/api/character")
-    suspend fun getCharacters(@Query("page") page: Int = 1): Response<ResponseInfoPaginationDto.Characters>
+    suspend fun getCharacters(@QueryMap query: Map<String, String>): Response<ResponseInfoPaginationDto.Characters>
 
     @GET("/api/character/{idCharacter}")
     suspend fun getCharacter(@Path("idCharacter") idCharacter: Int): Response<CharacterDto>
