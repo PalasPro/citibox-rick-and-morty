@@ -61,3 +61,8 @@ data class EpisodeDto(
     val url: String,
     val created: String
 )
+
+data class RequestConfigDto(
+    var page : Int = 1,
+    var query: String? = null
+)

@@ -4,14 +4,14 @@ import arrow.core.Either
 import com.palaspro.citiboxchallenge.domainlayer.DomainLayerContract
 import com.palaspro.citiboxchallenge.domainlayer.model.ErrorBo
 
-const val LOAD_PAGE_CHARACTERS_UC = "loadPageCharactersUc"
+const val FILTER_CHARACTERS_UC = "filterCharactersUc"
 
-class LoadPageCharactersUc(
+class FilterCharactersUc(
     private val repository: DomainLayerContract.CharactersRepository
-) : DomainLayerContract.UseCase<Any?, Either<ErrorBo, Boolean>> {
+) : DomainLayerContract.UseCase<String, Either<ErrorBo, Boolean>> {
 
-    override suspend fun run(params: Any?): Either<ErrorBo, Boolean> =
-        repository.loadNextPageCharacters()
+    override suspend fun run(params: String): Either<ErrorBo, Boolean> =
+        repository.filterCharacters(query = params)
 
 
 }

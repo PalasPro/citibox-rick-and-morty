@@ -31,6 +31,10 @@ class CharactersLocalDataSourceImpl(
             }
         }
 
+    override suspend fun clearPaginationToCharacters() {
+        charactersDao.clearPaginationToCharacters()
+    }
+
     override suspend fun getCharacterSync(id: Int): Either<ErrorDto, CharacterDto> =
         charactersDao.getCharacterSync(id)?.toDto()?.right() ?: ErrorDto.NoData.left()
 

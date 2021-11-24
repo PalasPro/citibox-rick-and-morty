@@ -14,7 +14,8 @@ sealed class DomainLayerContract {
 
         suspend fun getMultipleCharacters(ids: List<Int>): Either<ErrorBo, List<CharacterBo>>
         suspend fun getCharacterSync(id: Int): Either<ErrorBo, CharacterBo>
-        suspend fun loadPageCharacters(page: Int): Either<ErrorBo, Boolean>
+        suspend fun loadNextPageCharacters(): Either<ErrorBo, Boolean>
+        suspend fun filterCharacters(query: String): Either<ErrorBo, Boolean>
     }
 
     interface LocationRepository {

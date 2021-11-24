@@ -19,9 +19,8 @@ class HomeViewModel(
                 handleError(it)
             },
             ifRight = {
-                nextPage = it.info.next ?: -1
-                _loadMore.value = (nextPage != -1)
                 emit(it.results)
+                _loadMore.value = it.info.hasNext
             }
         )
     }
@@ -29,12 +28,20 @@ class HomeViewModel(
     private val _loadMore: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val loadMore: SharedFlow<Boolean> = _loadMore
 
-    private var nextPage: Int = 1
+    init {
+        filterCharacters()
+    }
 
     fun loadNextPage() {
         viewModelScope.launch(Dispatchers.IO) {
-            bridge.loadNextPage(page = nextPage)
-                .fold(ifLeft = { handleError(it) }, ifRight = { handleSuccessNextPage(it) })
+            bridge.loadNextPage()
+                .fold(ifLeft = { handleErrorNextPage(it) }, ifRight = { handleSuccessNextPage(it) })
+        }
+    }
+
+    fun filterCharacters(query: String = "") {
+        viewModelScope.launch(Dispatchers.IO) {
+            bridge.filterCharacters(query)
         }
     }
 
@@ -44,9 +51,17 @@ class HomeViewModel(
         }
     }
 
-    private fun handleError(errorBo: ErrorBo) {
-        when (errorBo) {
-            is ErrorBo.NoData -> loadNextPage()
+    private fun handleErrorNextPage(error: ErrorBo) {
+        when (error) {
+            is ErrorBo.NoData -> Unit
+            is ErrorBo.UnKnown -> Unit
+            is ErrorBo.ApiCall -> Unit
+        }
+    }
+
+    private fun handleError(error: ErrorBo) {
+        when (error) {
+            is ErrorBo.NoData -> Unit
             is ErrorBo.UnKnown -> Unit
             is ErrorBo.ApiCall -> Unit
         }
