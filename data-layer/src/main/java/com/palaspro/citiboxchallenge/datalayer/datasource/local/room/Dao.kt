@@ -21,7 +21,7 @@ interface CharactersDao {
     @Query("SELECT * FROM character WHERE id = :id")
     fun getCharacter(id: Int): Flow<Character?>
 
-    @Query("UPDATE character SET page = 0")
+    @Query("UPDATE character SET page = 0, hasNextPage = 0")
     suspend fun clearPaginationToCharacters()
 
 }

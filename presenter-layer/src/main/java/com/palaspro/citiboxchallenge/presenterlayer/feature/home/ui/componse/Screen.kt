@@ -30,8 +30,8 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
+    val loadMore = viewModel.loadMore
     val characters = viewModel.characters.collectAsState(initial = initialCharacters).value
-    val loadMore = viewModel.loadMore.collectAsState(initial = false).value
     Column {
         TopAppBar(title = {
             Text(
@@ -55,10 +55,9 @@ fun HomeScreen(
                     navController.navigate("match/${character.id}")
                 })
             }
-            if (loadMore) {
+            if(loadMore) {
                 item {
-                    LoadingItem()
-                    viewModel.loadNextPage()
+                    LoadingItem(viewModel)
                 }
             }
         }

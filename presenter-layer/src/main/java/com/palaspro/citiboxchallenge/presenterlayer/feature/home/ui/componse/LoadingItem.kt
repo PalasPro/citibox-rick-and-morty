@@ -9,9 +9,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.palaspro.citiboxchallenge.presenterlayer.base.Green
 import com.palaspro.citiboxchallenge.presenterlayer.base.margin8Dp
+import com.palaspro.citiboxchallenge.presenterlayer.feature.home.viewmodel.HomeViewModel
 
 @Composable
-fun LoadingItem(modifier: Modifier = Modifier) {
+fun LoadingItem(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
     Text(
         text = "Loading...",
         color = Green,
@@ -21,4 +22,6 @@ fun LoadingItem(modifier: Modifier = Modifier) {
             .padding(margin8Dp)
             .fillMaxWidth()
     )
+
+    viewModel.loadNextPage()
 }
